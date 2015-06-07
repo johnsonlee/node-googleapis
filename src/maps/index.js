@@ -55,6 +55,12 @@ function makeUrl(service, args) {
         enumerable : true,
     });
 
+    Object.defineProperty(this, 'API_ELEVATION', {
+        value : this.SERVICE_URL + '/elevation/json',
+        configurable : true,
+        enumerable : true,
+    });
+
     this.directions = function(args, onSuccess, onError) {
         var self = this;
 
@@ -116,6 +122,22 @@ function makeUrl(service, args) {
                     }
 
                     onSuccess && onSuccess(matrix);
+                } else {
+                    onError && onError({
+                        message : result.error_message || result.status
+                    });
+                }
+            },
+            onError,
+        ]);
+    };
+
+    this.elevation = function(args, onSuccess, onError) {
+        return xhr.get.apply(xhr, [
+            makeUrl(this.API_ELEVATION, args),
+            function(result) {
+                if (/^OK$/.test(result.status)) {
+                    onSuccess && onSuccess(result.results);
                 } else {
                     onError && onError({
                         message : result.error_message || result.status
