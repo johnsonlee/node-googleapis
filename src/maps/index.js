@@ -1,3 +1,13 @@
+/**
+ * @namespace google.maps
+ * 
+ * @property {String} SERVICE_URL
+ * @property {String} API_DIRECTIONS
+ * @property {String} API_STATIC_MAPS
+ * @property {String} API_DISTANCE_MATRIX
+ * @property {String} API_ELEVATION
+ * @property {Object} services
+ */
 'use strict';
 
 var xhr = require('../xhr');
@@ -17,22 +27,6 @@ function makeUrl(service, args) {
 
     Object.defineProperty(this, 'SERVICE_URL', {
         value : 'https://maps.googleapis.com/maps/api',
-        configurable : true,
-        enumerable : true,
-    });
-
-    Object.defineProperty(this, 'services', {
-        value : {
-            directions : {
-                url : this.API_DIRECTIONS,
-            },
-            staticmaps : {
-                url : this.API_STATIC_MAPS,
-            },
-            distancematrix : {
-                url : this.API_DISTANCE_MATRIX,
-            },
-        },
         configurable : true,
         enumerable : true,
     });
@@ -61,7 +55,32 @@ function makeUrl(service, args) {
         enumerable : true,
     });
 
-    this.directions = function(args, onSuccess, onError) {
+    Object.defineProperty(this, 'services', {
+        value : {
+            directions : {
+                url : this.API_DIRECTIONS,
+            },
+            staticmaps : {
+                url : this.API_STATIC_MAPS,
+            },
+            distancematrix : {
+                url : this.API_DISTANCE_MATRIX,
+            },
+        },
+        configurable : true,
+        enumerable : true,
+    });
+
+}).call(module.exports = {
+
+    /**
+     * @memberof google.maps
+     * 
+     * @param {Object} args
+     * @param {Function} onSuccess
+     * @param {Function} onError
+     */
+    directions : function(args, onSuccess, onError) {
         var self = this;
 
         return xhr.get.apply(xhr, [
@@ -90,17 +109,31 @@ function makeUrl(service, args) {
             },
             onError,
         ]);
-    };
+    },
 
-    this.staticMap = function(args, onSuccess, onError) {
+    /**
+     * @memberof google.maps
+     * 
+     * @param {Object} args
+     * @param {Function} onSuccess
+     * @param {Function} onError
+     */
+    staticMap : function(args, onSuccess, onError) {
         return xhr.get.apply(xhr, [
             makeUrl(this.API_STATIC_MAPS, args),
             onSuccess,
             onError,
         ]);
-    };
+    },
 
-    this.distanceMatrix = function(args, onSuccess, onError) {
+    /**
+     * @memberof google.maps
+     * 
+     * @param {Object} args
+     * @param {Function} onSuccess
+     * @param {Function} onError
+     */
+    distanceMatrix : function(args, onSuccess, onError) {
         return xhr.get.apply(xhr, [
             makeUrl(this.API_DISTANCE_MATRIX, args),
             function(result) {
@@ -130,9 +163,16 @@ function makeUrl(service, args) {
             },
             onError,
         ]);
-    };
+    },
 
-    this.elevation = function(args, onSuccess, onError) {
+    /**
+     * @memberof google.maps
+     * 
+     * @param {Object} args
+     * @param {Function} onSuccess
+     * @param {Function} onError
+     */
+    elevation : function(args, onSuccess, onError) {
         return xhr.get.apply(xhr, [
             makeUrl(this.API_ELEVATION, args),
             function(result) {
@@ -146,7 +186,7 @@ function makeUrl(service, args) {
             },
             onError,
         ]);
-    };
+    },
 
-}).call(module.exports);
+});
 

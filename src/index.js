@@ -1,3 +1,8 @@
+/**
+ * The google API
+ * 
+ * @namespace google
+ */
 'use strict';
 
 (function() {
